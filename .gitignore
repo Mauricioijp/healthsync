@@ -43,3 +43,4 @@ venv/
 Thumbs.db
 Query.sql
 api-patients.zip
+api-users/
