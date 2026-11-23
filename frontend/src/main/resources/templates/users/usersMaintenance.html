@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantenimiento de Usuarios</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    header {
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 0;
+    }
+    .container {
+      display: grid;
+      gap: 24px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 20px;
+    }
+    .card h2 {
+      margin-top: 0;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      gap: 6px;
+    }
+    input, select {
+      border: 1px solid #ccd0d8;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    button, .button-link {
+      border: none;
+      border-radius: 6px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    button[type="submit"] {
+      background: #2e75ff;
+      color: white;
+    }
+    button[type="reset"] {
+      background: #f0f0f0;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    th {
+      background: #f7f9fc;
+      font-weight: 600;
+    }
+    tbody tr:hover {
+      background: #f6f8fb;
+    }
+    .table-actions a,
+    .table-actions button {
+      margin-right: 8px;
+      background: #5a67d8;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .table-actions button.delete {
+      background: #e53e3e;
+    }
+    .table-actions a.button-link {
+      background: #4a5568;
+    }
+    @media (max-width: 720px) {
+      .actions {
+        flex-direction: column;
+      }
+      .table-actions a,
+      .table-actions button {
+        margin-bottom: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Panel de mantenimiento de usuarios</h1>
+    <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+      <a th:href="@{/index}" class="button-link">Regresar a inicio</a>
+    </div>
+  </header>
+  <main class="container">
+      <section class="card">
+      <h2>Lista de usuarios</h2>
+      <form th:action="@{/usersMaintenance}" method="get"></form>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Name</th>
+            <th>Photo</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:if="${#lists.isEmpty(usersList)}">
+            <td colspan="11">No hay usuarios registrados.</td>
+          </tr>
+          <tr th:each="user : ${usersList}">
+            <td th:text="${user.userid}">1</td>
+            <td th:text="${user.user}"></td>
+            <td th:text="${user.password}"></td>
+            <td th:text="${user.fullname}"></td>
+            <td th:text="${user.photo}"></td>
+            <td th:text="${user.role}"></td>
+            <td class="table-actions">
+              <a th:href="@{/users/update/{id}(id=${user.id})}" class="button-link">Editar</a>
+              <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post" style="display:inline;">
+                <button type="submit" class="delete">Eliminar</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h3><a th:href="@{'--'}" class="button-link">Nuevo Usuario</a></h3>
+    </section>
+  </main>
+</body>
+</html>

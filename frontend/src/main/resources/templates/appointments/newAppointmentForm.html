@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Patient Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-submit {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-submit:hover {
+            background-color: #45a049;
+        }
+        .btn-cancel {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn-cancel:hover {
+            background-color: #da190b;
+        }
+        .error {
+            color: #d32f2f;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>New Appointment Registration</h1>
+        <form th:action="@{/saveAppointment}" method="post" th:object="${appointment}">
+            <input type="hidden" th:field="*{idapp}">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="patientid">Patient ID:</label>
+                    <input type="text" id="patientid" th:field="*{patientid}" required>
+                </div>
+                <div class="form-group">
+                    <label for="medicalrecordnumber">Medical Record Number:</label>
+                    <input type="text" id="medicalrecordnumber" th:field="*{medicalrecordnumber}" required>
+                </div>
+                
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nationalid">National ID:</label>
+                    <input type="text" id="nationalid" th:field="*{nationalid}" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctor">Doctor Name:</label>
+                    <input type="text" id="doctor" th:field="*{doctor}" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" th:field="*{date}" required>
+                </div>
+            </div>
+
+
+            <div class="button-group">
+                <button type="submit" class="btn-submit">Save Appointment</button>
+                <a th:href="@{/appointmentsMaintenance}" style="text-decoration: none;">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
