@@ -44,18 +44,20 @@ The main communication flow is organized as follows:
 - The API Gateway routes incoming requests to the appropriate backend service.
 - Eureka maintains the registry of available microservices.
 - The backend services handle their respective business operations.
-- MySQL provides data persistence for the services.
+- MySQL provides data persistence for the patient, appointment and security services.
 
 ```mermaid
 flowchart TD
     U[User] --> F[Frontend - Thymeleaf]
     F --> G[API Gateway - Spring Cloud Gateway]
+
     G --> P[api-patients]
     G --> A[api-appointments]
     G --> S[api-security]
 
     P --> DB1[(MySQL)]
     A --> DB2[(MySQL)]
+    S --> DB3[(MySQL)]
 
     P -. Service Discovery .-> E[Eureka Server]
     A -. Service Discovery .-> E
