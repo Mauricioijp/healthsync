@@ -22,9 +22,31 @@ public class PatientServiceImplTest {
     @InjectMocks
     private PatientServiceImpl patientService;
 
-    @Test
-    void testCreatePatient() {
+    @Nested
+    class CreatePatientTests {
 
+        @Test
+        void shouldCreatePatient() {
+
+            // Arrange
+            PatientEntity patient = new PatientEntity();
+            patient.setGivenName("John");
+            patient.setFamilyName("Smith");
+
+            when(patientRepository.save(patient))
+                .thenReturn(patient);
+
+            // Act
+            PatientEntity result =
+                patientService.createPatient(patient);
+
+            // Assert
+            assertNotNull(result);
+            assertEquals("John", result.getGivenName());
+            assertEquals("Smith", result.getFamilyName());
+
+            verify(patientRepository, times(1)).save(patient);
+        }
     }
 
     @Test
