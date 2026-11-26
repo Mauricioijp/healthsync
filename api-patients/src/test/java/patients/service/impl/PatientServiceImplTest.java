@@ -3,6 +3,8 @@ package patients.service.impl;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,9 +51,36 @@ public class PatientServiceImplTest {
         }
     }
 
-    @Test
-    void testDeletePatient() {
+    @Nested
+    class DeletePatientTests {
 
+        @Test
+        void shouldDeletePatient() {
+
+            // Arrange
+            Integer patientId = 1;
+
+            PatientEntity patient = new PatientEntity();
+            patient.setId(patientId);
+            patient.setGivenName("John");
+
+            when(patientRepository.findById(patientId))
+                .thenReturn(Optional.of(patient));
+
+            // Act
+            PatientEntity result =
+                patientService.deletePatient(patientId);
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(patientId, result.getId());
+
+            verify(patientRepository, times(1))
+                .findById(patientId);
+
+            verify(patientRepository, times(1))
+                .delete(patient);
+        }
     }
 
     @Test
