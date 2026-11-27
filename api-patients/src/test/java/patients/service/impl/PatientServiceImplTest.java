@@ -1,6 +1,7 @@
 package patients.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -123,8 +124,66 @@ public class PatientServiceImplTest {
         }
     }
 
-    @Test
-    void testUpdatePatient() {
+    @Nested
+    class UpdatePatientTests {
 
+        @Test
+        void shouldUpdatePatient() {
+
+            // Arrange
+            Integer patientId = 1;
+
+            PatientEntity existingPatient = new PatientEntity();
+            existingPatient.setId(patientId);
+            existingPatient.setGivenName("John");
+            existingPatient.setFamilyName("Smith");
+
+            PatientEntity updatedPatient = new PatientEntity();
+            updatedPatient.setId(patientId);
+            updatedPatient.setGivenName("Jonathan");
+            updatedPatient.setFamilyName("Doe");
+
+            when(patientRepository.findById(patientId))
+                .thenReturn(Optional.of(existingPatient));
+
+            when(patientRepository.save(existingPatient))
+                .thenReturn(existingPatient);
+
+            // Act
+            PatientEntity result =
+                patientService.updatePatient(updatedPatient);
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(patientId, result.getId());
+            assertEquals("Jonathan", result.getGivenName());
+            assertEquals("Doe", result.getFamilyName());
+
+            verify(patientRepository, times(1))
+                .findById(patientId);
+
+            verify(patientRepository, times(1))
+                .save(existingPatient);
+        }
+
+        @Test
+        void shouldThrowExceptionWhenPatientDoesNotExist() {
+
+            // Arrange
+            Integer patientId = 999;
+
+            PatientEntity patient = new PatientEntity();
+            patient.setId(patientId);
+
+            when(patientRepository.findById(patientId))
+                .thenReturn(Optional.empty());
+
+            // Act & Assert
+            assertThrows(RuntimeException.class, () ->
+                patientService.updatePatient(patient)
+            );
+
+            verify(patientRepository, never()).save(any());
+        }
     }
 }
